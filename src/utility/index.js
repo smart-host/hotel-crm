@@ -31,3 +31,31 @@ export const fillPremium = (
     economyGuests
   };
 }
+
+export const optimizeOccupancy = (
+  guestList,
+  threshold,
+  premiumRoomCount,
+  economyRoomCount
+) => {
+  const guestCategories = categorizeGuests(guestList, threshold);
+  const premiumGuests = guestCategories.premiumGuests;
+  const economyGuests = guestCategories.economyGuests;
+
+  const filledRooms = fillPremium(
+    premiumRoomCount,
+    premiumGuests.length,
+    economyGuests,
+    occupyRooms(premiumGuests, premiumRoomCount)
+  )
+
+  const occupiedEconomy = occupyRooms(
+    filledRooms.economyGuests,
+    economyRoomCount
+  )
+
+  return {
+    occupiedPremium: filledRooms.occupiedPremium,
+    occupiedEconomy
+  }
+}

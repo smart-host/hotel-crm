@@ -1,4 +1,4 @@
-import { categorizeGuests, occupyRooms, fillPremium } from '../utility'
+import { categorizeGuests, occupyRooms, fillPremium, optimizeOccupancy } from '../utility'
 
 const testGuestData = [
   23,
@@ -60,6 +60,20 @@ describe('optimization', () => {
         45,
         23,
         22
+      ]);
+    });
+  });
+
+  describe('optimizeOccupancy', () => {
+    it('should fill premium rooms', () => {
+      expect(optimizeOccupancy(testGuestData, 100, 3, 3).occupiedPremium).toEqual([
+        374, 209, 155
+      ]);
+    });
+
+    it('should optimize occupancy for premium rooms', () => {
+      expect(optimizeOccupancy(testGuestData, 100, 6, 5).occupiedPremium).toEqual([
+        374, 209, 155, 115, 101, 100
       ]);
     });
   });
