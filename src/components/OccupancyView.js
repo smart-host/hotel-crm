@@ -1,17 +1,27 @@
 import React, { useState } from 'react';
 import { Flex, Form } from '@gnerkus/ui-kit';
 import FileInput from './FileInput';
+import { optimizeOccupancy } from '../utility'
 
 const initialGuestList = [
   23, 45, 155, 374, 22, 99, 100, 101, 115, 209
 ];
+
+const threshold = 100
 
 const OccupancyView = () => {
   const [guestList, onLoadGuestList] = useState(initialGuestList);
   const [premRoomCount, setPremRoomCount] = useState(3);
   const [econRoomCount, setEconRoomCount] = useState(3);
 
-  console.log('premium room count', premRoomCount);
+  const occupancy = optimizeOccupancy(
+    guestList, threshold, premRoomCount, econRoomCount
+  );
+
+  const occupiedPremiumCount = occupancy.occupiedPremium.length;
+  const occupiedPremiumValue = occupancy.occupiedPremium.reduce((acc, guest) => acc + guest, 0)
+  const occupiedEconomyCount = occupancy.occupiedEconomy.length;
+  const occupiedEconomyValue = occupancy.occupiedEconomy.reduce((acc, guest) => acc + guest, 0)
 
   return (
     <Flex.FlexGroup direction='column'>
@@ -48,12 +58,20 @@ const OccupancyView = () => {
         <h2>Occupied Rooms</h2>
         <Flex.FlexGroup direction='column'>
           <Flex.FlexItem>
-            <p>Occupied premium rooms: <strong>3</strong></p>
-            <p>Total premium room value: <strong>200</strong></p>
+            <p>Occupied premium rooms: 
+              <strong>{occupiedPremiumCount}</strong>
+            </p>
+            <p>Total premium room value: 
+              <strong>{occupiedPremiumValue}</strong>
+            </p>
           </Flex.FlexItem>
           <Flex.FlexItem>
-            <p>Occupied economy rooms: <strong>3</strong></p>
-            <p>Total economy room value: <strong>200</strong></p>
+            <p>Occupied economy rooms: 
+              <strong>{occupiedEconomyCount}</strong>
+            </p>
+            <p>Total economy room value: 
+              <strong>{occupiedEconomyValue}</strong>
+            </p>
           </Flex.FlexItem>
         </Flex.FlexGroup>
       </Flex.FlexItem>
